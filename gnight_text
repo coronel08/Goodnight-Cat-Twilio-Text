@@ -1,0 +1,32 @@
+import openpyxl
+import os
+import random
+from twilio.rest import Client
+
+accountSID = 'input your account SID Twilio'
+authToken = 'Input your Auth Token Twilio'
+
+twilioCli = Client(accountSID, authToken)
+myTwilioNumber = '+input 10 digit number'
+os.chdir('change to desired working directory')
+
+file = open("catfacts.txt").readlines()
+wb = openpyxl.load_workbook('twiliodb1.xlsx', use_iterators=True)
+sheetList = wb.sheetnames
+ws = wb[sheetList[0]]
+
+max_row = ws.max_row
+max_col = ws.max_column
+
+def twiliotext():
+    # it should start from 2 not 1 to avoid get the column name
+    randline = random.choice(file)
+    for i in range(2, max_row + 1):
+        cell = ws.cell(row=i, column=1)
+        names = cell.value.replace("'",'')
+        cell = ws.cell(row=i, column=2)
+        phn = cell.value
+        msg = ("Hey, {} love you goodnight buddy. \n CatFact: {}".format(names,randline))
+        print(phn, msg)
+        message = twilioCli.messages.create(body=msg, from_=myTwilioNumber, to=phn)
+twiliotext()
