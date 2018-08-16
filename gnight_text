@@ -23,9 +23,9 @@ def twiliotext():
     randline = random.choice(file)
     for i in range(2, max_row + 1):
         cell = ws.cell(row=i, column=1)
-        names = cell.value.replace("'",'')
+        names = cell.value.replace
         cell = ws.cell(row=i, column=2)
-        phn = cell.value
+        phn = "+" + str(cell.value)
         msg = ("Hey, {} love you goodnight buddy. \n CatFact: {}".format(names,randline))
         print(phn, msg)
         message = twilioCli.messages.create(body=msg, from_=myTwilioNumber, to=phn)
